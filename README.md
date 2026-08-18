@@ -14,6 +14,7 @@ A Wemos D1 Mini (ESP8266) firmware that performs **Wi-Fi deauthentication** on a
 - Serial command interface (`/scan`, `/status`, `/help`)
 - Real-time stats: ok/fail/tx-done/beacon/deauth/uptime
 - LED indicator (fast blink = active)
+- 160 MHz CPU overclock with `-O2` high-performance build flags (see Platform Details)
 
 ## Hardware Required
 
@@ -293,6 +294,18 @@ Early versions showed `wifi_send_pkt_freedom` returning `0` (success) but beacon
 | Arduino core | 2.7.4 |
 | ESP8266 SDK | 2.2.1 (with patched `libnet80211.a`) |
 | Board | `d1_mini` (Wemos D1 Mini) |
+| CPU frequency | 160 MHz (`board_build.f_cpu = 160000000L`) |
+| Build flags | `-O2 -fno-exceptions -ffunction-sections -fdata-sections` |
+
+### Build Usage (Measured)
+
+With the 160 MHz config and `-O2` flags, a clean build reports:
+
+- RAM: 33.9% (27,772 / 81,920 bytes)
+- Flash: 26.0% (271,080 / 1,044,464 bytes)
+
+This leaves ample headroom; the firmware is transmission-rate limited by the
+1 Mbps management-frame airtime, not by the CPU.
 
 ## Credits & References
 
